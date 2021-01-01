@@ -8,7 +8,6 @@ class TerciaryInput extends Component {
             terciaryInput: "",
             sequence: "abcdefghijklmnopqrstuvwxyz0123456789",
         };
-        this.onUserIsTyping = this.onUserIsTyping.bind(this);
     }
 
     onKeyDown = e => {
