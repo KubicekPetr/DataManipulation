@@ -34,16 +34,17 @@ class TerciaryInput extends Component {
 
     writeCharacterAndResetSequence = (e) => {
         const { sequence } = this.state;
-        if (sequence.length <= 1) {
-            this.setState(prev => ({ 
-                [e.target.name]: prev[e.target.name] + sequence,
-                sequence: "abcdefghijklmnopqrstuvwxyz0123456789",
-            }));
-        } else {
+        if (sequence.length > 1) {
             this.setState(prev => ({ 
                 [e.target.name]: prev[e.target.name] + "",
             }));
+            return;
         }
+
+        this.setState(prev => ({
+            [e.target.name]: prev[e.target.name] + sequence,
+            sequence: "abcdefghijklmnopqrstuvwxyz0123456789",
+        }));
     }
 
     onUserIsTyping = e => {
