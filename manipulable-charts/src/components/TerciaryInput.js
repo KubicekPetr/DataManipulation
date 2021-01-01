@@ -11,6 +11,14 @@ class TerciaryInput extends Component {
         this.onHandleStep = this.onHandleStep.bind(this);
     }
 
+    onKeyDown = e => {
+        if(e.keyCode === 8) {
+            this.setState(prev => ({ 
+                [e.target.name]: prev[e.target.name].slice(0, -1),
+            }));
+        }
+    }
+
     onHandleStep = e => {
         const value = e.target.value;
         const newLetter = value[value.length - 1];
@@ -47,6 +55,7 @@ class TerciaryInput extends Component {
                     name="terciaryInput"
                     value={this.state.terciaryInput}
                     onInput={this.onHandleStep}
+                    onKeyDown={this.onKeyDown}
                 />
             </>
         );
