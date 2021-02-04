@@ -13,40 +13,28 @@ class BinaryInput extends Component {
     }
 
     onKeyDown = (e) => {
-        // 97,98
-        if (this.state.released.includes(e.keyCode)) {
-            this.setState(prevState => ({
-                released: [...prevState.pressed.filter(x => x !== e.keyCode)],
-            }));
+        if (this.state.pressed.includes(e.keyCode)) {
+            return;
         }
+        // 97,98
 
-        this.setState(prevState => ({
-            pressed: [...prevState.pressed, e.keyCode],
-        }));
-
-        this.setState({},console.log('onPress', 'pressed', this.state.pressed, 'released', this.state.released))
+        this.setState(({pressed}) => ({
+            pressed: [...pressed, e.keyCode],
+        }), () => this.handleLogging());
     }
 
     onKeyUp = (e) => {
         // 97,98
-        if (this.state.pressed.includes(e.keyCode)) {
-            this.setState(prevState => ({
-                pressed: [...prevState.pressed.filter(x => x !== e.keyCode)],
-            }));
-        }
 
-        this.setState(prevState => ({
-            released: [...prevState.released, e.keyCode],
-        }));
-
-        this.setState({},console.log('onRelease', 'pressed', this.state.pressed, 'released', this.state.released))
+        this.setState(({released}) => ({
+            released: [...released, e.keyCode],
+        }), () => this.handleLogging());
     }
 
-    handleStep = () => {
-
+    handleLogging = () => {
+        console.log('pressed', this.state.pressed);
+        console.log('released', this.state.released);
     }
-
-    
 
     render() {
         return (
@@ -57,7 +45,6 @@ class BinaryInput extends Component {
                     type="text"
                     name="BinaryInput"
                     value={this.state.binaryInput}
-                    onInput={({target: {value}}) => {return;}}
                     onKeyDown={this.onKeyDown}
                     onKeyUp={this.onKeyUp}
                 />
