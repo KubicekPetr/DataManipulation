@@ -8,7 +8,6 @@ class BinaryInput extends Component {
             binaryInput: "",
             sequence: "***abcdefghijklmnopqrstuvwxyz***",
             pressed: [],
-            released: [],
         };
     }
 
@@ -16,24 +15,30 @@ class BinaryInput extends Component {
         if (this.state.pressed.includes(e.keyCode)) {
             return;
         }
-        // 97,98
 
-        this.setState(({pressed}) => ({
+        this.setState(({ pressed }) => ({
             pressed: [...pressed, e.keyCode],
         }), () => this.handleLogging());
     }
 
-    onKeyUp = (e) => {
-        // 97,98
+    onKeyUp = () => {
+        // when all pushed keys are released,
+        // we can evaluate
+        const { pressed } = this.state;
+        if (pressed.includes(97) && pressed.includes(98)) {
+            console.log('send');
+        } else if (pressed.includes(97)) {
+            console.log('left');
+        } else if (pressed.includes(98)) {
+            console.log('right');
+        }
 
-        this.setState(({released}) => ({
-            released: [...released, e.keyCode],
-        }), () => this.handleLogging());
+        // clear array
+        this.setState({ pressed: [] });
     }
 
     handleLogging = () => {
         console.log('pressed', this.state.pressed);
-        console.log('released', this.state.released);
     }
 
     render() {
@@ -51,6 +56,16 @@ class BinaryInput extends Component {
             </>
         );
     }
+}
+
+function arraysAreIdentical(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+    for (var i = 0, len = arr1.length; i < len; i++) {
+        if (arr1[i] !== arr2[i]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 export default BinaryInput;
