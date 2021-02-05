@@ -1,14 +1,20 @@
 import { Component } from 'preact';
 
 class BinaryInput extends Component {
+    sequence = "   abcdefghijklmnopqrstuvwxyz   ";
 
     constructor() {
         super();
         this.state = {
             binaryInput: "",
-            sequence: "***abcdefghijklmnopqrstuvwxyz***",
+            position: this.sequence.length / 2,
+            step: this.sequence.length / 4,
             pressed: [],
         };
+    }
+
+    componentDidMount() {
+        console.log('n')
     }
 
     onKeyDown = (e) => {
@@ -18,7 +24,7 @@ class BinaryInput extends Component {
 
         this.setState(({ pressed }) => ({
             pressed: [...pressed, e.keyCode],
-        }), () => this.handleLogging());
+        }));
     }
 
     onKeyUp = () => {
@@ -26,11 +32,22 @@ class BinaryInput extends Component {
         // we can evaluate
         const { pressed } = this.state;
         if (pressed.includes(97) && pressed.includes(98)) {
-            console.log('send');
+            this.setState(({ binaryInput, position }) => ({
+                binaryInput: binaryInput + this.sequence[position],
+                // reset position
+                position: this.sequence.length / 2,
+                step: this.sequence.length / 4,
+            }));
         } else if (pressed.includes(97)) {
-            console.log('left');
+            this.setState(({ position, step }) => ({
+                position: position - step,
+                step: step / 2,
+            }), () => this.handleLogging());
         } else if (pressed.includes(98)) {
-            console.log('right');
+            this.setState(({ position, step }) => ({
+                position: position + step,
+                step: step / 2,
+            }), () => this.handleLogging());
         }
 
         // clear array
@@ -38,13 +55,15 @@ class BinaryInput extends Component {
     }
 
     handleLogging = () => {
-        console.log('pressed', this.state.pressed);
+        console.log('current', this.sequence[this.state.position]);
     }
 
     render() {
         return (
             <>
-                <div style={{ fontSize: '40px' }}>{this.state.sequence}</div>
+                <div style={{ fontSize: '30px' }}>&nbsp;&nbsp;12345678901234567890123456&nbsp;</div>
+                <div style={{ fontSize: '30px' }}>&nbsp;{this.sequence}&nbsp;</div>
+                &nbsp;&nbsp;
                 <input
                     style={{ fontSize: '40px' }}
                     type="text"
@@ -56,16 +75,6 @@ class BinaryInput extends Component {
             </>
         );
     }
-}
-
-function arraysAreIdentical(arr1, arr2) {
-    if (arr1.length !== arr2.length) return false;
-    for (var i = 0, len = arr1.length; i < len; i++) {
-        if (arr1[i] !== arr2[i]) {
-            return false;
-        }
-    }
-    return true;
 }
 
 export default BinaryInput;
