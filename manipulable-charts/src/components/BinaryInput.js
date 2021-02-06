@@ -10,6 +10,7 @@ class BinaryInput extends Component {
             position: this.sequence.length / 2,
             step: this.sequence.length / 4,
             pressed: [],
+            deleting: false,
         };
     }
 
@@ -31,31 +32,41 @@ class BinaryInput extends Component {
         // when all pushed keys are released,
         // we can evaluate
         const { pressed } = this.state;
-        if (pressed.includes(97) && pressed.includes(98)) {
+        if (pressed.includes(97) && pressed.includes(98) && !this.state.deleting) {
             this.setState(({ binaryInput, position }) => ({
                 binaryInput: binaryInput + this.sequence[position],
                 // reset position
+                deleting: true,
                 position: this.sequence.length / 2,
                 step: this.sequence.length / 4,
+            }), () => this.handleLogging(this.sequence[this.state.position]));
+        } else if (pressed.includes(97) && pressed.includes(98) && this.state.deleting) {
+            this.setState(({ binaryInput }) => ({
+                binaryInput: binaryInput.slice(0, -1),
             }));
         } else if (pressed.includes(97)) {
             this.setState(({ position, step }) => ({
+                deleting: false,
                 position: position - step,
                 step: step / 2,
-            }), () => this.handleLogging());
+            }), () => this.handleLogging(this.sequence[this.state.position]));
         } else if (pressed.includes(98)) {
             this.setState(({ position, step }) => ({
+                deleting: false,
                 position: position + step,
                 step: step / 2,
-            }), () => this.handleLogging());
+            }), () => this.handleLogging(this.sequence[this.state.position]));
         }
 
         // clear array
         this.setState({ pressed: [] });
     }
 
-    handleLogging = () => {
-        console.log('current', this.sequence[this.state.position]);
+    handleLogging = (paramToLog = undefined) => {
+        console.log(this.state);
+        if (paramToLog) {
+            console.log(paramToLog);
+        }
     }
 
     render() {
