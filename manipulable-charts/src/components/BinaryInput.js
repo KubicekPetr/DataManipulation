@@ -1,7 +1,9 @@
 import { Component } from 'preact';
 
+import Prompter from './Prompter';
+
 class BinaryInput extends Component {
-    sequence = "   abcdefghijklmnopqrstuvwxyz   ";
+    sequence = "---abcdefghijklmnopqrstuvwxyz---";
 
     constructor() {
         super();
@@ -72,11 +74,10 @@ class BinaryInput extends Component {
     render() {
         return (
             <>
-                <div style={{ fontSize: '30px' }}>&nbsp;&nbsp;12345678901234567890123456&nbsp;</div>
-                <div style={{ fontSize: '30px' }}>&nbsp;{this.sequence}&nbsp;</div>
-                &nbsp;&nbsp;
+                <Prompter sequence={this.sequence} position={this.state.position} />
+                <br />
                 <input
-                    style={{ fontSize: '40px' }}
+                    style={{ fontSize: '55px' }}
                     type="text"
                     name="BinaryInput"
                     value={this.state.binaryInput}
