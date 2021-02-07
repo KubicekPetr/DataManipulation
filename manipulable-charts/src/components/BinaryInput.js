@@ -31,11 +31,10 @@ class BinaryInput extends Component {
     }
 
     checkAgainstSteps = (step) => {
-        if (step < 1) {
+        if (step === 1) {
             this.dispatchCharacter();
             // clear array
             this.setState({ pressed: [] });
-            return true;
         }
     }
 
@@ -60,23 +59,19 @@ class BinaryInput extends Component {
                 binaryInput: binaryInput.slice(0, -1),
             }));
         } else if (pressed.includes(97)) {
-            if (this.checkAgainstSteps(this.state.step)) {
-                return;
-            }
             this.setState(({ position, step }) => ({
                 deleting: false,
                 position: position - step,
                 step: step / 2,
             }), () => this.handleLogging(this.sequence[this.state.position]));
+            this.checkAgainstSteps(this.state.step);
         } else if (pressed.includes(98)) {
-            if (this.checkAgainstSteps(this.state.step)) {
-                return;
-            }
             this.setState(({ position, step }) => ({
                 deleting: false,
                 position: position + step,
                 step: step / 2,
             }), () => this.handleLogging(this.sequence[this.state.position]));
+            this.checkAgainstSteps(this.state.step);
         }
 
         // clear array
