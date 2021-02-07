@@ -42,7 +42,6 @@ class BinaryInput extends Component {
         this.setState(({ binaryInput, position }) => ({
             binaryInput: binaryInput + this.sequence[position],
             // reset position
-            deleting: true,
             position: this.sequence.length / 2,
             step: this.sequence.length / 4,
         }), () => this.handleLogging(this.sequence[this.state.position]));
@@ -54,6 +53,8 @@ class BinaryInput extends Component {
         const { pressed } = this.state;
         if (pressed.includes(97) && pressed.includes(98) && !this.state.deleting) {
             this.dispatchCharacter();
+            // open deleting mode
+            this.setState({ deleting: true });
         } else if (pressed.includes(97) && pressed.includes(98) && this.state.deleting) {
             this.setState(({ binaryInput }) => ({
                 binaryInput: binaryInput.slice(0, -1),
@@ -65,6 +66,8 @@ class BinaryInput extends Component {
                 step: step / 2,
             }), () => this.handleLogging(this.sequence[this.state.position]));
             this.checkAgainstSteps(this.state.step);
+            // close deleting mode
+            this.setState({ deleting: false });
         } else if (pressed.includes(98)) {
             this.setState(({ position, step }) => ({
                 deleting: false,
@@ -72,6 +75,8 @@ class BinaryInput extends Component {
                 step: step / 2,
             }), () => this.handleLogging(this.sequence[this.state.position]));
             this.checkAgainstSteps(this.state.step);
+            // close deleting mode
+            this.setState({ deleting: false });
         }
 
         // clear array
