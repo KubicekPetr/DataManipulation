@@ -1,6 +1,8 @@
 import { Component } from 'preact';
 
-import Prompter from './Prompter';
+import Prompter from '../Prompter/Prompter';
+
+import FeatureTogglers from './featureTogglers';
 
 class BinaryInput extends Component {
     sequence = "---abcdefghijklmnopqrstuvwxyz---";
@@ -63,7 +65,7 @@ class BinaryInput extends Component {
         if (pressed.includes(97) && pressed.includes(98) && !this.state.deleting) {
             this.dispatchCharacter();
             // open deleting mode
-            this.setState({ deleting: true });
+            this.setState({ deleting: FeatureTogglers.deleting ? true : false });
         } else if (pressed.includes(97) && pressed.includes(98) && this.state.deleting) {
             this.setState(({ binaryInput }) => ({
                 binaryInput: binaryInput.slice(0, -1),
