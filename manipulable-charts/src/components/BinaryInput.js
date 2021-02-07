@@ -25,9 +25,18 @@ class BinaryInput extends Component {
             return;
         }
 
+        this.handleEmptyInput();
+
         this.setState(({ pressed }) => ({
             pressed: [...pressed, e.keyCode],
         }));
+    }
+
+    handleEmptyInput = () => {
+        if (!this.state.binaryInput) {
+            // close deleting mode
+            this.setState({ deleting: false });
+        }
     }
 
     checkAgainstSteps = (step) => {
