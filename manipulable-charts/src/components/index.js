@@ -1,9 +1,9 @@
 import TerciaryInput from "./TerciaryInput.js";
-import BinaryInput from "./BinaryInput/BinaryInput.js";
+import BinaryTyping from "./binary-typing/binary-typing.component";
 import LineChart from "./LineChart.js";
 
 export {
     TerciaryInput,
     LineChart,
-    BinaryInput,
+    BinaryTyping,
 }

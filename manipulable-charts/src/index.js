@@ -1,6 +1,6 @@
 import './style';
 import { render } from 'preact';
-import { TerciaryInput, LineChart, BinaryInput } from './components/index.js';
+import { TerciaryInput, LineChart, BinaryTyping } from './components/index.js';
 
 const data = [
     {x: 0, y: 0},
@@ -11,5 +11,5 @@ const data = [
 ];
 
 render(<>
-    <BinaryInput />
+    <BinaryTyping />
 </>, document.body);

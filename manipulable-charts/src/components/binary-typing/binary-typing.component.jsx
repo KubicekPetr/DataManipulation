@@ -1,19 +1,20 @@
 import { Component } from 'preact';
 
 import Prompter from '../Prompter/Prompter';
+import BinaryInput from '../binary-input/binary-input.component';
 
 import FeatureTogglers from './featureTogglers';
 
 const DirectionEnum = Object.freeze({'left': -1, 'right': 1});
 
-class BinaryInput extends Component {
+class BinaryTyping extends Component {
     sequence = `  -abcdefghijklmnopqrstuvwxyz-  `;
 
 
     constructor() {
         super();
         this.state = {
-            binaryInput: "",
+            value: "",
             position: this.sequence.length / 2,
             step: this.sequence.length / 4,
             pressed: [],
@@ -38,15 +39,15 @@ class BinaryInput extends Component {
     }
 
     handleEmptyInput = () => {
-        if (!this.state.binaryInput) {
+        if (!this.state.value) {
             // close deleting mode
             this.setState({ deleting: false });
         }
     }
 
     dispatchCharacter = () => {
-        this.setState(({ binaryInput, position }) => ({
-            binaryInput: binaryInput + this.sequence[position],
+        this.setState(({ value, position }) => ({
+            value: value + this.sequence[position],
             // reset position
             position: this.sequence.length / 2,
             step: this.sequence.length / 4,
@@ -72,8 +73,8 @@ class BinaryInput extends Component {
             // open deleting mode
             this.setState({ deleting: FeatureTogglers.deleting ? true : false });
         } else if (pressed.includes(97) && pressed.includes(98) && this.state.deleting) {
-            this.setState(({ binaryInput }) => ({
-                binaryInput: binaryInput.slice(0, -1),
+            this.setState(({ value }) => ({
+                value: value.slice(0, -1),
             }));
         } else if (pressed.includes(97)) {
             this.shiftThePostion(DirectionEnum.left);
@@ -97,17 +98,15 @@ class BinaryInput extends Component {
             <>
                 <Prompter sequence={this.sequence} position={this.state.position} />
                 <br />
-                <input
-                    style={{ fontSize: '55px' }}
-                    type="text"
-                    name="BinaryInput"
-                    value={this.state.binaryInput}
-                    onKeyDown={this.onKeyDown}
-                    onKeyUp={this.onKeyUp}
-                />
+                <BinaryInput
+                style={{ fontSize: '55px' }}
+                name="BinaryInput" 
+                value={this.state.value}
+                onKeyDown={this.onKeyDown}
+                onKeyUp={this.onKeyUp} />
             </>
         );
     }
 }
 
-export default BinaryInput;
+export default BinaryTyping;
