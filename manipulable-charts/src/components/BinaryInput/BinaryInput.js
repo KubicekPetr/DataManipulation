@@ -4,8 +4,11 @@ import Prompter from '../Prompter/Prompter';
 
 import FeatureTogglers from './featureTogglers';
 
+const DirectionEnum = Object.freeze({'left': -1, 'right': 1});
+
 class BinaryInput extends Component {
-    sequence = "---abcdefghijklmnopqrstuvwxyz---";
+    sequence = `  -abcdefghijklmnopqrstuvwxyz-  `;
+
 
     constructor() {
         super();
@@ -41,14 +44,6 @@ class BinaryInput extends Component {
         }
     }
 
-    checkAgainstSteps = (step) => {
-        if (step === 1) {
-            this.dispatchCharacter();
-            // clear array
-            this.setState({ pressed: [] });
-        }
-    }
-
     dispatchCharacter = () => {
         this.setState(({ binaryInput, position }) => ({
             binaryInput: binaryInput + this.sequence[position],
@@ -56,6 +51,16 @@ class BinaryInput extends Component {
             position: this.sequence.length / 2,
             step: this.sequence.length / 4,
         }), () => this.handleLogging(this.sequence[this.state.position]));
+    }
+
+    shiftThePostion = (direction) => {
+        this.setState(({ position, step }) => ({
+            deleting: false,
+            position: position + direction * step,
+            step: step > 1 ? step / 2 : step,
+        }), () => this.handleLogging(this.sequence[this.state.position]));
+        // close deleting mode
+        this.setState({ deleting: false });
     }
 
     onKeyUp = () => {
@@ -71,23 +76,9 @@ class BinaryInput extends Component {
                 binaryInput: binaryInput.slice(0, -1),
             }));
         } else if (pressed.includes(97)) {
-            this.setState(({ position, step }) => ({
-                deleting: false,
-                position: position - step,
-                step: step / 2,
-            }), () => this.handleLogging(this.sequence[this.state.position]));
-            this.checkAgainstSteps(this.state.step);
-            // close deleting mode
-            this.setState({ deleting: false });
+            this.shiftThePostion(DirectionEnum.left);
         } else if (pressed.includes(98)) {
-            this.setState(({ position, step }) => ({
-                deleting: false,
-                position: position + step,
-                step: step / 2,
-            }), () => this.handleLogging(this.sequence[this.state.position]));
-            this.checkAgainstSteps(this.state.step);
-            // close deleting mode
-            this.setState({ deleting: false });
+            this.shiftThePostion(DirectionEnum.right);
         }
 
         // clear array
