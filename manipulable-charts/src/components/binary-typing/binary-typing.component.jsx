@@ -22,10 +22,6 @@ class BinaryTyping extends Component {
         };
     }
 
-    componentDidMount() {
-        console.log('n')
-    }
-
     onKeyDown = (e) => {
         if (this.state.pressed.includes(e.keyCode)) {
             return;
@@ -102,6 +98,7 @@ class BinaryTyping extends Component {
                 style={{ fontSize: '55px' }}
                 name="BinaryInput" 
                 value={this.state.value}
+                onChange={() => this.setState(prev => ({value: prev.value}))}
                 onKeyDown={this.onKeyDown}
                 onKeyUp={this.onKeyUp} />
             </>
