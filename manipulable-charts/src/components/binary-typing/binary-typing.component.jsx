@@ -8,7 +8,7 @@ import FeatureTogglers from './featureTogglers';
 const DirectionEnum = Object.freeze({'left': -1, 'right': 1});
 
 class BinaryTyping extends Component {
-    sequence = `  -abcdefghijklmnopqrstuvwxyz-  `;
+    sequence = `---abcdefghijklmnopqrstuvwxyz---`;
 
 
     constructor() {
@@ -43,7 +43,7 @@ class BinaryTyping extends Component {
 
     dispatchCharacter = () => {
         this.setState(({ value, position }) => ({
-            value: value + this.sequence[position],
+            value: value + this.sequence[position - 1],
             // reset position
             position: this.sequence.length / 2,
             step: this.sequence.length / 4,
@@ -51,13 +51,17 @@ class BinaryTyping extends Component {
     }
 
     shiftThePostion = (direction) => {
-        this.setState(({ position, step }) => ({
-            deleting: false,
-            position: position + direction * step,
-            step: step > 1 ? step / 2 : step,
-        }), () => this.handleLogging(this.sequence[this.state.position]));
-        // close deleting mode
-        this.setState({ deleting: false });
+        const { position, step } = this.state;
+        const newPos = position + direction * step;
+        const isPosValid = newPos > 0 && newPos < 33;
+        if (isPosValid) {
+            this.setState(({ position, step }) => ({
+                position: position + direction * step,
+                step: step > 1 ? step / 2 : step,
+            }), () => this.handleLogging(this.sequence[this.state.position]));
+            // close deleting mode
+            this.setState({ deleting: false });
+        }
     }
 
     onKeyUp = () => {
@@ -92,7 +96,7 @@ class BinaryTyping extends Component {
     render() {
         return (
             <>
-                <Prompter sequence={this.sequence} position={this.state.position} />
+                <Prompter sequence={this.sequence} position={this.state.position - 1} />
                 <br />
                 <BinaryInput
                 style={{ fontSize: '55px' }}
